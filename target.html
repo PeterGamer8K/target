@@ -1,0 +1,91 @@
+<canvas width="1500" height="900"></canvas>
+
+<script>
+    var tela = document.querySelector('canvas');
+    var pincel = tela.getContext('2d');
+
+    pincel.fillStyle = 'white';
+    pincel.fillRect(0, 0, 1500, 900);
+
+    var posiçãoX = Math.round(Math.random() * 1000);
+    var posiçãoY = Math.round(Math.random() * 1000);
+    var raio = 10;
+    var pontos = 0;
+    var jogador = 1;
+    var pontuação = 0;
+
+    alert("Jogador " + jogador);
+    console.log("Jogador " + jogador);
+
+    function desenhaCirculo(x, y, raio, cor) {
+
+        pincel.fillStyle = cor;
+        pincel.beginPath();
+        pincel.arc(x, y, raio, 0, 2 * Math.PI);
+        pincel.fill();
+    }
+
+    function desenhaAlvo() {
+        posiçãoX = Math.round(Math.random() * 1500);
+        posiçãoY = Math.round(Math.random() * 950);
+        desenhaCirculo(posiçãoX, posiçãoY, raio + 20, 'red'); // maior círculo
+        desenhaCirculo(posiçãoX, posiçãoY, raio + 10, 'white');
+        desenhaCirculo(posiçãoX, posiçãoY, raio, 'red'); // menor circulo
+
+    }
+
+    function atualizaTela() {
+
+        limpaTela();
+        desenhaAlvo();
+    }
+
+    function limpaTela() {
+
+        pincel.clearRect(0, 0, 1500, 900);
+    }
+
+    function dispara(evento) {
+
+        var x = evento.pageX - tela.offsetLeft;
+        var y = evento.pageY - tela.offsetTop;
+
+        if (x >= posiçãoX - 10 && x <= posiçãoX + 10 && y >= posiçãoY - 10 && y <= posiçãoY + 10) {
+
+            pontos++;
+            console.log("Pontos: " + pontos);
+
+        } else if (x < 1500 && y < 900) {
+
+            console.log("Pontos: " + (pontos - 1));
+            pontos = pontos - 1;
+
+        }
+
+        if (pontos >= 10) {
+
+            jogador++;
+            console.log("Jogador " + jogador);
+            alert("Você ganhou um ponto!!! Próximo jogador");
+            alert("Jogador " + jogador);
+            pontos = 0;
+            pontuação = pontuação + 1;
+
+        }
+
+        if (pontos <= -10) {
+
+            alert("Você perdeu! Próximo jogador");
+            jogador++;
+            console.log("Jogador " + jogador);
+            alert("Jogador " + jogador);
+            pontos = 0;
+
+        }
+
+    }
+
+    tela.onclick = dispara;
+
+    setInterval(atualizaTela, 1000);
+</script>
